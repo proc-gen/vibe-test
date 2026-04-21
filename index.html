@@ -4,10 +4,19 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vibe-test</title>
+    <title>3D L-System Editor</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div id="canvas-container"></div>
+      <div id="controls">
+        <textarea id="grammar-input" placeholder="Enter L-system grammar...
+Example:
+Axiom: F
+Rule: F -> FF+[+F-F-F]-[-F+F+F]"></textarea>
+        <button id="generate-btn">Generate</button>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
