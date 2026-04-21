@@ -6,9 +6,7 @@ const canvasContainer = document.getElementById('canvas-container');
 const axiomInput = document.getElementById('axiom-input') as HTMLInputElement;
 const ruleInput = document.getElementById('rule-input') as HTMLInputElement;
 const iterationsInput = document.getElementById('iterations-input') as HTMLInputElement;
-const generateBtn = document.getElementById('generate-btn');
-
-if (!canvasContainer || !axiomInput || !ruleInput || !iterationsInput || !generateBtn) {
+if (!canvasContainer || !axiomInput || !ruleInput || !iterationsInput) {
   throw new Error('Required UI elements not found in the DOM');
 }
 
@@ -38,7 +36,10 @@ function generate() {
   visualizer.renderLSystem(instructions);
 }
 
-generateBtn.addEventListener('click', generate);
+// Hot reload: trigger generation on any input change
+axiomInput.addEventListener('input', generate);
+ruleInput.addEventListener('input', generate);
+iterationsInput.addEventListener('input', generate);
 
 // Initial generation
 generate();
