@@ -3,10 +3,12 @@ import { LSystem } from './lsystem';
 import { LSystemVisualizer } from './visualizer';
 
 const canvasContainer = document.getElementById('canvas-container');
-const grammarInput = document.getElementById('grammar-input') as HTMLTextAreaElement;
+const axiomInput = document.getElementById('axiom-input') as HTMLInputElement;
+const ruleInput = document.getElementById('rule-input') as HTMLInputElement;
+const iterationsInput = document.getElementById('iterations-input') as HTMLInputElement;
 const generateBtn = document.getElementById('generate-btn');
 
-if (!canvasContainer || !grammarInput || !generateBtn) {
+if (!canvasContainer || !axiomInput || !ruleInput || !iterationsInput || !generateBtn) {
   throw new Error('Required UI elements not found in the DOM');
 }
 
@@ -14,17 +16,25 @@ if (!canvasContainer || !grammarInput || !generateBtn) {
 const visualizer = new LSystemVisualizer(canvasContainer);
 
 // Default grammar to start with
-const defaultGrammar = `Axiom: F
-Rule: F -> FF+[+F-F-F]-[-F+F+F]
-Iterations: 3`;
-
-grammarInput.value = defaultGrammar;
+axiomInput.value = 'F';
+ruleInput.value = 'F -> FF+[+F-&F-&F]-[-F+^F+^F]';
+iterationsInput.value = '3';
 
 function generate() {
-  const input = grammarInput.value;
-  const { axiom, rules, iterations } = LSystem.parseGrammar(input);
+  const axiom = axiomInput.value;
+  const ruleStr = ruleInput.value;
+  const iterations = parseInt(iterationsInput.value) || 0;
+
+  // Parse the rule string "Key -> Value" into a map
+  const rules: Record<string, string> = {};
+  if (ruleStr.includes('->')) {
+    const [key, value] = ruleStr.split('->').map(s => s.trim());
+    if (key && value) {
+      rules[key] = value;
+    }
+  }
+
   const instructions = LSystem.generate(axiom, rules, iterations);
-  
   visualizer.renderLSystem(instructions);
 }
 

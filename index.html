@@ -10,10 +10,34 @@
     <div id="app">
       <div id="canvas-container"></div>
       <div id="controls">
-        <textarea id="grammar-input" placeholder="Enter L-system grammar...
-Example:
-Axiom: F
-Rule: F -> FF+[+F-F-F]-[-F+F+F]"></textarea>
+        <div id="instructions">
+          <h3>Grammar Instructions</h3>
+          <p>Define your L-System using the fields below:</p>
+          <ul>
+            <li><code>F</code>: Move forward and draw a segment.</li>
+            <li><code>+</code> / <code>-</code>: Yaw (Z-axis rotation).</li>
+            <li><code>&</code> / <code>^</code>: Pitch (X-axis rotation).</li>
+            <li><code>/</code> / <code>\</code>: Roll (Y-axis rotation).</li>
+            <li><code>[</code> / <code>]</code>: Stack operations for branching structures.</li>
+          </ul>
+          <p style="margin-top: 10px; font-size: 12px; color: #aaa;">
+            Example Rule: <code>F -> FF+[+F-F-F]-[-F+F+F]</code>
+          </p>
+        </div>
+        <div id="input-group">
+          <div class="field">
+            <label for="axiom-input">Axiom</label>
+            <input type="text" id="axiom-input" placeholder="e.g. F" />
+          </div>
+          <div class="field">
+            <label for="rule-input">Rule</label>
+            <input type="text" id="rule-input" placeholder="e.g. F -> FF+[+F-F-F]-[-F+F+F]" />
+          </div>
+          <div class="field">
+            <label for="iterations-input">Iterations</label>
+            <input type="number" id="iterations-input" min="0" max="10" placeholder="3" />
+          </div>
+        </div>
         <button id="generate-btn">Generate</button>
       </div>
     </div>

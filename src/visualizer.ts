@@ -15,7 +15,7 @@ export class LSystemVisualizer {
     this.scene.background = new THREE.Color(0x1a1a1a);
 
     this.camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    this.camera.position.set(0, 2, 5);
+    this.camera.position.set(3, 5, 8);
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setSize(container.clientWidth, container.clientHeight);
