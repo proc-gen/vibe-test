@@ -4,7 +4,7 @@ import { Turtle } from './turtle';
 
 export class LSystemVisualizer {
   private scene: THREE.Scene;
-  private camera: THREE.PerspectiveCamera;
+  private camera: THREE.OrthographicCamera;
   private renderer: THREE.WebGLRenderer;
   private controls: OrbitControls;
   private container: HTMLElement;
@@ -15,7 +15,16 @@ export class LSystemVisualizer {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x1a1a1a);
 
-    this.camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const aspect = container.clientWidth / container.clientHeight;
+    const viewSize = 10;
+    this.camera = new THREE.OrthographicCamera(
+      -viewSize * aspect / 2,
+      viewSize * aspect / 2,
+      viewSize / 2,
+      -viewSize / 2,
+      0.1,
+      1000
+    );
     this.camera.position.set(3, 5, 8);
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -32,12 +41,20 @@ export class LSystemVisualizer {
     directionalLight.position.set(5, 10, 7);
     this.scene.add(directionalLight);
 
+    const axesHelper = new THREE.AxesHelper(5);
+    this.scene.add(axesHelper);
+
     window.addEventListener('resize', () => this.onWindowResize());
     this.animate();
   }
 
   private onWindowResize() {
-    this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
+    const aspect = this.container.clientWidth / this.container.clientHeight;
+    const viewSize = 10;
+    this.camera.left = -viewSize * aspect / 2;
+    this.camera.right = viewSize * aspect / 2;
+    this.camera.top = viewSize / 2;
+    this.camera.bottom = -viewSize / 2;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
   }

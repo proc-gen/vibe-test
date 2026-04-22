@@ -4,13 +4,20 @@ import * as THREE from 'three';
 import { SAMPLE_INSTRUCTIONS } from '../src/tests/fixtures/lsystem-grammars';
 
 describe('Turtle', () => {
-  it('should produce a straight line for instruction "F"', () => {
-    const segments = Turtle.calculatePath(SAMPLE_INSTRUCTIONS.straight, 25, 1);
-    expect(segments).toHaveLength(1);
-    expect(segments[0].start.x).toBe(0);
-    expect(segments[0].start.y).toBe(0);
-    expect(segments[0].end.x).toBe(0);
-    expect(segments[0].end.y).toBe(1); // Default direction is (0, 1, 0)
+  it('should produce a straight line for movement characters', () => {
+    // Test 'F'
+    const segmentsF = Turtle.calculatePath('F', 25, 1);
+    expect(segmentsF).toHaveLength(1);
+    expect(segmentsF[0].end.y).toBe(1);
+
+    // Test other uppercase/lowercase letters as move commands
+    const segmentsG = Turtle.calculatePath('G', 25, 1);
+    expect(segmentsG).toHaveLength(1);
+    expect(segmentsG[0].end.y).toBe(1);
+
+    const segmentsA = Turtle.calculatePath('a', 25, 1);
+    expect(segmentsA).toHaveLength(1);
+    expect(segmentsA[0].end.y).toBe(1);
   });
 
   it('should handle rotations correctly', () => {

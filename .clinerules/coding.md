@@ -12,9 +12,13 @@ Code should be coherent across a project and follow strict guidelines
 - Make sure all tests are passing
 
 ## Updating implementation files
+- Always read the file to see its contents before writing to it. DO NOT BLINDLY OVERWRITE FILES
 - If there's an associated `*.test.ts` file, make sure it's updated to test the new logic and that all tests are passing
 
 ## Comments
 - If it's not complex logic, it doesn't need a comment
 - If it's named properly, it doesn't need a comment
 - Unless it's to suppress a warning on purpose, it probably doesn't need a comment
+
+## Planning
+- Always review your memory when making a plan to review previous context of an area of code

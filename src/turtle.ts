@@ -14,17 +14,18 @@ export class Turtle {
     const segments: LineSegment[] = [];
 
     for (const char of instructions) {
+      if (/[a-zA-Z]/.test(char) && !['+', '-', '&', '^', '\\', '/', '[', ']'].includes(char)) {
+        const direction = new THREE.Vector3(0, 1, 0).applyQuaternion(currentQuaternion);
+        const nextPosition = currentPosition.clone().add(direction.multiplyScalar(stepLength));
+        segments.push({
+          start: currentPosition.clone(),
+          end: nextPosition.clone()
+        });
+        currentPosition.copy(nextPosition);
+        continue;
+      }
+
       switch (char) {
-        case 'F': {
-          const direction = new THREE.Vector3(0, 1, 0).applyQuaternion(currentQuaternion);
-          const nextPosition = currentPosition.clone().add(direction.multiplyScalar(stepLength));
-          segments.push({
-            start: currentPosition.clone(),
-            end: nextPosition.clone()
-          });
-          currentPosition.copy(nextPosition);
-          break;
-        }
         case '+': { // Yaw (Z)
           const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), angleRad);
           currentQuaternion.multiply(q);

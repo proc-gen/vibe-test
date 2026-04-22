@@ -7,8 +7,9 @@ export function init() {
   const axiomInput = document.getElementById('axiom-input') as HTMLInputElement;
   const ruleInput = document.getElementById('rule-input') as HTMLInputElement;
   const iterationsInput = document.getElementById('iterations-input') as HTMLInputElement;
+  const angleInput = document.getElementById('angle-input') as HTMLInputElement;
 
-  if (!canvasContainer || !axiomInput || !ruleInput || !iterationsInput) {
+  if (!canvasContainer || !axiomInput || !ruleInput || !iterationsInput || !angleInput) {
     throw new Error('Required UI elements not found in the DOM');
   }
 
@@ -24,6 +25,7 @@ export function init() {
     const axiom = axiomInput.value;
     const ruleStr = ruleInput.value;
     const iterations = parseInt(iterationsInput.value) || 0;
+    const angleDeg = parseFloat(angleInput.value) || 25;
 
     // Parse the rule string "Key -> Value" into a map
     const rules: Record<string, string> = {};
@@ -35,13 +37,14 @@ export function init() {
     }
 
     const instructions = LSystem.generate(axiom, rules, iterations);
-    visualizer.renderLSystem(instructions);
+    visualizer.renderLSystem(instructions, angleDeg);
   }
 
   // Hot reload: trigger generation on any input change
   axiomInput.addEventListener('input', generate);
   ruleInput.addEventListener('input', generate);
   iterationsInput.addEventListener('input', generate);
+  angleInput.addEventListener('input', generate);
 
   // Initial generation
   generate();
