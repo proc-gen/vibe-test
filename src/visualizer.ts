@@ -11,6 +11,7 @@ export class LSystemVisualizer {
   private controls: OrbitControls;
   private container: HTMLElement;
   private group: THREE.Group;
+  private renderNeeded = true;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -47,6 +48,11 @@ export class LSystemVisualizer {
     this.scene.add(axesHelper);
 
     window.addEventListener('resize', () => this.onWindowResize());
+    
+    this.controls.addEventListener('change', () => {
+      this.renderNeeded = true;
+    });
+
     this.animate();
   }
 
@@ -59,22 +65,45 @@ export class LSystemVisualizer {
     this.camera.bottom = -viewSize / 2;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+    this.renderNeeded = true;
   }
 
   private animate() {
     requestAnimationFrame(() => this.animate());
-    this.controls.update();
-    this.renderer.render(this.scene, this.camera);
+    
+    if (this.controls.enabled) {
+      this.controls.update();
+    }
+
+    if (this.renderNeeded) {
+      this.renderer.render(this.scene, this.camera);
+      this.renderNeeded = false;
+    }
   }
 
   public clear() {
     while (this.group.children.length > 0) {
-      const child = this.group.children[0] as THREE.Mesh;
+      const child = this.group.children[0];
+      
+      // Recursively dispose of geometries and materials
+      child.traverse((node) => {
+        if ((node as any).geometry) {
+          (node as any).geometry.dispose();
+        }
+        if ((node as any).material) {
+          const materials = Array.isArray((node as any).material) 
+            ? (node as any).material 
+            : [(node as any).material];
+          materials.forEach((mat: any) => mat.dispose());
+        }
+      });
+
       this.group.remove(child);
     }
   }
 
   public renderLSystem(instructions: string, angleDeg: number = 25, stepLength: number = 0.5, style: RenderStyle = 'lines') {
+    this.renderNeeded = true;
     this.clear();
     const segments = Turtle.calculatePath(instructions, angleDeg, stepLength);
     if (segments.length === 0) return;
@@ -83,12 +112,16 @@ export class LSystemVisualizer {
       case 'lines':
         this.renderLines(segments);
         break;
-      case 'cylinders':
-        this.renderMeshSegments(segments, new THREE.CylinderGeometry(0.05, 0.05, stepLength), 'cylinders');
+      case 'cylinders': {
+        const geo = new THREE.CylinderGeometry(0.05, 0.05, stepLength);
+        this.renderMeshSegments(segments, geo, 'cylinders');
         break;
-      case 'pills':
-        this.renderMeshSegments(segments, new THREE.CapsuleGeometry(0.05, stepLength, 4, 8), 'pills');
+      }
+      case 'pills': {
+        const geo = new THREE.CapsuleGeometry(0.05, stepLength, 4, 8);
+        this.renderMeshSegments(segments, geo, 'pills');
         break;
+      }
       case 'voxels':
         this.renderVoxels(segments, stepLength);
         break;

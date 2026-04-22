@@ -12,13 +12,19 @@ vi.mock('three', async () => {
     domElement = document.createElement('canvas');
   }
 
-  class MockLineSegments {
+  class MockObject3D {
     add = vi.fn();
+    remove = vi.fn();
+    traverse = vi.fn((cb) => cb(this));
+    removeFromParent = vi.fn();
+    dispose = vi.fn();
+    geometry = { dispose: vi.fn() };
+    material = { dispose: vi.fn() };
   }
 
-  class MockInstancedMesh {
+  class MockLineSegments extends MockObject3D {}
+  class MockInstancedMesh extends MockObject3D {
     setMatrixAt = vi.fn();
-    add = vi.fn();
   }
 
   class MockBufferGeometry {
@@ -26,15 +32,17 @@ vi.mock('three', async () => {
     setFromPoints = vi.fn().mockReturnThis();
   }
 
+  class MockGeometry {}
+
   return {
     ...actual,
     WebGLRenderer: MockWebGLRenderer,
-    LineSegments: vi.fn().mockImplementation(MockLineSegments),
-    InstancedMesh: vi.fn().mockImplementation(MockInstancedMesh),
-    BufferGeometry: vi.fn().mockImplementation(MockBufferGeometry),
-    BoxGeometry: vi.fn().mockImplementation(function() { return {}; }),
-    CylinderGeometry: vi.fn().mockImplementation(function() { return {}; }),
-    CapsuleGeometry: vi.fn().mockImplementation(function() { return {}; }),
+    LineSegments: vi.fn().mockImplementation(MockLineSegments as any),
+    InstancedMesh: vi.fn().mockImplementation(MockInstancedMesh as any),
+    BufferGeometry: vi.fn().mockImplementation(MockBufferGeometry as any),
+    BoxGeometry: vi.fn().mockImplementation(MockGeometry as any),
+    CylinderGeometry: vi.fn().mockImplementation(MockGeometry as any),
+    CapsuleGeometry: vi.fn().mockImplementation(MockGeometry as any),
   };
 });
 

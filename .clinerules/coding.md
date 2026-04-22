@@ -11,7 +11,7 @@ Code should be coherent across a project and follow strict guidelines
 - For example, `visualizer.ts` has the test file `visualizer.test.ts`
 - Make sure all tests are passing
 
-## Updating implementation files
+## Updating files
 - Always read the file to see its contents before writing to it. DO NOT BLINDLY OVERWRITE FILES
 - If there's an associated `*.test.ts` file, make sure it's updated to test the new logic and that all tests are passing
 
@@ -22,3 +22,4 @@ Code should be coherent across a project and follow strict guidelines
 
 ## Planning
 - Always review your memory when making a plan to review previous context of an area of code
+- Always plan on adding/updating test files
