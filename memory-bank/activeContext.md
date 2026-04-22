@@ -1,7 +1,7 @@
 # Active Context: 3D L-System Visualizer
 
 ## Current Focus
-The immediate goal was to establish a comprehensive Memory Bank for the project. This process involves analyzing the existing codebase and documenting its architecture, purpose, and current state to ensure continuity across sessions.
+Implementing advanced 3D rendering styles (Voxels, Cylinders, Pills) to provide more organic and volumetric representations of L-Systems beyond simple lines.
 
 ## Recent Changes
 - **Memory Bank Initialization**: Created the `memory-bank/` directory and populated it with core documentation files:

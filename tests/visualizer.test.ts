@@ -10,12 +10,31 @@ vi.mock('three', async () => {
     setClearColor = vi.fn();
     render = vi.fn();
     domElement = document.createElement('canvas');
-    constructor() {}
+  }
+
+  class MockLineSegments {
+    add = vi.fn();
+  }
+
+  class MockInstancedMesh {
+    setMatrixAt = vi.fn();
+    add = vi.fn();
+  }
+
+  class MockBufferGeometry {
+    setAttribute = vi.fn().mockReturnThis();
+    setFromPoints = vi.fn().mockReturnThis();
   }
 
   return {
     ...actual,
     WebGLRenderer: MockWebGLRenderer,
+    LineSegments: vi.fn().mockImplementation(MockLineSegments),
+    InstancedMesh: vi.fn().mockImplementation(MockInstancedMesh),
+    BufferGeometry: vi.fn().mockImplementation(MockBufferGeometry),
+    BoxGeometry: vi.fn().mockImplementation(function() { return {}; }),
+    CylinderGeometry: vi.fn().mockImplementation(function() { return {}; }),
+    CapsuleGeometry: vi.fn().mockImplementation(function() { return {}; }),
   };
 });
 
@@ -44,17 +63,37 @@ describe('LSystemVisualizer', () => {
   it('should clear existing lines before rendering new ones', () => {
     const visualizer = new LSystemVisualizer(container);
     
-    // We can check if renderLSystem is called and then visually 
-    // (or via internal state) it clears. Since the group is private,
-    // we test that calling render multiple times doesn't crash 
-    // and maintains expected behavior.
     visualizer.renderLSystem('F');
     visualizer.renderLSystem('FF');
     
-    // If clear() failed or wasn't called, the scene would grow indefinitely.
-    // While we can't easily check group size without making it public,
-    // testing that renderLSystem completes successfully is a start.
     expect(true).toBe(true); 
+  });
+
+  it('should use LineSegments for "lines" style', () => {
+    const visualizer = new LSystemVisualizer(container);
+    visualizer.renderLSystem('F', 25, 0.5, 'lines');
+    expect(THREE.LineSegments).toHaveBeenCalled();
+  });
+
+  it('should use InstancedMesh with CylinderGeometry for "cylinders" style', () => {
+    const visualizer = new LSystemVisualizer(container);
+    visualizer.renderLSystem('F', 25, 0.5, 'cylinders');
+    expect(THREE.InstancedMesh).toHaveBeenCalled();
+    expect(THREE.CylinderGeometry).toHaveBeenCalled();
+  });
+
+  it('should use InstancedMesh with CapsuleGeometry for "pills" style', () => {
+    const visualizer = new LSystemVisualizer(container);
+    visualizer.renderLSystem('F', 25, 0.5, 'pills');
+    expect(THREE.InstancedMesh).toHaveBeenCalled();
+    expect(THREE.CapsuleGeometry).toHaveBeenCalled();
+  });
+
+  it('should use InstancedMesh with BoxGeometry for "voxels" style', () => {
+    const visualizer = new LSystemVisualizer(container);
+    visualizer.renderLSystem('F', 25, 0.5, 'voxels');
+    expect(THREE.InstancedMesh).toHaveBeenCalled();
+    expect(THREE.BoxGeometry).toHaveBeenCalled();
   });
 
   it('should handle empty instructions gracefully', () => {

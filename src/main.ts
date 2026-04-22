@@ -8,8 +8,9 @@ export function init() {
   const ruleInput = document.getElementById('rule-input') as HTMLInputElement;
   const iterationsInput = document.getElementById('iterations-input') as HTMLInputElement;
   const angleInput = document.getElementById('angle-input') as HTMLInputElement;
+  const styleSelect = document.getElementById('style-select') as HTMLSelectElement;
 
-  if (!canvasContainer || !axiomInput || !ruleInput || !iterationsInput || !angleInput) {
+  if (!canvasContainer || !axiomInput || !ruleInput || !iterationsInput || !angleInput || !styleSelect) {
     throw new Error('Required UI elements not found in the DOM');
   }
 
@@ -26,6 +27,7 @@ export function init() {
     const ruleStr = ruleInput.value;
     const iterations = parseInt(iterationsInput.value) || 0;
     const angleDeg = parseFloat(angleInput.value) || 25;
+    const renderStyle = styleSelect.value as any;
 
     // Parse the rule string "Key -> Value" into a map
     const rules: Record<string, string> = {};
@@ -37,7 +39,7 @@ export function init() {
     }
 
     const instructions = LSystem.generate(axiom, rules, iterations);
-    visualizer.renderLSystem(instructions, angleDeg);
+    visualizer.renderLSystem(instructions, angleDeg, 0.5, renderStyle);
   }
 
   // Hot reload: trigger generation on any input change
@@ -45,6 +47,7 @@ export function init() {
   ruleInput.addEventListener('input', generate);
   iterationsInput.addEventListener('input', generate);
   angleInput.addEventListener('input', generate);
+  styleSelect.addEventListener('change', generate);
 
   // Initial generation
   generate();

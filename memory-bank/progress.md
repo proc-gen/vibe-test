@@ -17,5 +17,3 @@ The core engine is fully functional. The application successfully transforms a u
 ## Future Roadmap
 - [ ] Implement a library of "Preset" grammars (e.g., Barnsley Fern, Sierpinski Triangle).
 - [ ] Add support for variable step lengths and colors based on recursion depth.
-- [ ] Improve UI/UX with a dedicated control panel.
-- [ ] Explore adding 3D meshes (cylinders) instead of simple lines for a more organic look.
