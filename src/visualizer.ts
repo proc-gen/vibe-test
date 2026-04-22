@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { Turtle } from './turtle';
 
 export class LSystemVisualizer {
   private scene: THREE.Scene;
@@ -56,75 +57,18 @@ export class LSystemVisualizer {
 
   public renderLSystem(instructions: string, angleDeg: number = 25, stepLength: number = 0.5) {
     this.clear();
-    const angleRad = (angleDeg * Math.PI) / 180;
+    const segments = Turtle.calculatePath(instructions, angleDeg, stepLength);
     
-    let currentPosition = new THREE.Vector3(0, 0, 0);
-    let currentQuaternion = new THREE.Quaternion();
-    const stack: { pos: THREE.Vector3, quat: THREE.Quaternion }[] = [];
-
     const points: THREE.Vector3[] = [];
     const colors: THREE.Color[] = [];
 
-    for (const char of instructions) {
-      switch (char) {
-        case 'F': {
-          const direction = new THREE.Vector3(0, 1, 0).applyQuaternion(currentQuaternion);
-          const nextPosition = currentPosition.clone().add(direction.multiplyScalar(stepLength));
-          
-          points.push(currentPosition.clone(), nextPosition.clone());
-          
-          // Color based on height for a "plant" look
-          colors.push(new THREE.Color(0x4caf50), new THREE.Color(0x8bc34a));
-
-          currentPosition.copy(nextPosition);
-          break;
-        }
-        case '+': { // Yaw (Z)
-          const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), angleRad);
-          currentQuaternion.multiply(q);
-          break;
-        }
-        case '-': { // Yaw (Z)
-          const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, -1), angleRad);
-          currentQuaternion.multiply(q);
-          break;
-        }
-        case '&': { // Pitch (X)
-          const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), angleRad);
-          currentQuaternion.multiply(q);
-          break;
-        }
-        case '^': { // Pitch (X)
-          const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-1, 0, 0), angleRad);
-          currentQuaternion.multiply(q);
-          break;
-        }
-        case '\\': { // Roll (Y)
-          const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), angleRad);
-          currentQuaternion.multiply(q);
-          break;
-        }
-        case '/': { // Roll (Y)
-          const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, -1, 0), angleRad);
-          currentQuaternion.multiply(q);
-          break;
-        }
-        case '[': {
-          stack.push({ pos: currentPosition.clone(), quat: currentQuaternion.clone() });
-          break;
-        }
-        case ']': {
-          const state = stack.pop();
-          if (state) {
-            currentPosition.copy(state.pos);
-            currentQuaternion.copy(state.quat);
-          }
-          break;
-        }
-      }
+    for (const segment of segments) {
+      points.push(segment.start, segment.end);
+      colors.push(new THREE.Color(0x4caf50), new THREE.Color(0x8bc34a));
     }
 
-    // Create geometry from points
+    if (points.length === 0) return;
+
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(new Float32Array(colors.flatMap(c => [c.r, c.g, c.b])), 3));
 
