@@ -10,6 +10,47 @@
     <div id="app">
       <div id="canvas-container"></div>
       <div id="controls">
+        <div id="input-group">
+          <div class="field">
+            <label for="style-select">Render Style</label>
+            <select id="style-select">
+              <option value="lines">Lines</option>
+              <option value="voxels">Voxels</option>
+              <option value="cylinders">Cylinders</option>
+              <option value="pills">Pills</option>
+            </select>
+          </div>
+
+          <div class="field numeric-field">
+            <label for="iterations-input">Iterations</label>
+            <div class="numeric-controls">
+              <button type="button" id="iterations-dec">-</button>
+              <input type="number" id="iterations-input" min="0" max="10" placeholder="3" />
+              <button type="button" id="iterations-inc">+</button>
+            </div>
+          </div>
+
+          <div class="field numeric-field">
+            <label for="angle-input">Angle (°)</label>
+            <div class="numeric-controls">
+              <button type="button" id="angle-dec">-</button>
+              <input type="number" id="angle-input" value="25" step="1" />
+              <button type="button" id="angle-inc">+</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="axiom-input">Axiom</label>
+            <input type="text" id="axiom-input" placeholder="e.g. F" />
+          </div>
+
+          <div id="rules-section">
+            <label class="rules-label">Rules</label>
+            <div id="rules-container"></div>
+            <button id="add-rule-btn">+ Add Rule</button>
+          </div>
+        </div>
+
         <div id="instructions">
           <h3>Grammar Instructions</h3>
           <p>Define your L-System using the fields below:</p>
@@ -24,34 +65,7 @@
             Example Rule: <code>F -> FF+[+F-F-F]-[-F+F+F]</code>
           </p>
         </div>
-        <div id="input-group">
-          <div class="field">
-            <label for="axiom-input">Axiom</label>
-            <input type="text" id="axiom-input" placeholder="e.g. F" />
-          </div>
-          <div class="field">
-            <label for="rule-input">Rule</label>
-            <input type="text" id="rule-input" placeholder="e.g. F -> FF+[+F-F-F]-[-F+F+F]" />
-          </div>
-           <div class="field">
-             <label for="iterations-input">Iterations</label>
-             <input type="number" id="iterations-input" min="0" max="10" placeholder="3" />
-           </div>
-            <div class="field">
-              <label for="angle-input">Angle (°)</label>
-              <input type="number" id="angle-input" value="25" step="1" />
-            </div>
-            <div class="field">
-              <label for="style-select">Render Style</label>
-              <select id="style-select">
-                <option value="lines">Lines</option>
-                <option value="voxels">Voxels</option>
-                <option value="cylinders">Cylinders</option>
-                <option value="pills">Pills</option>
-              </select>
-            </div>
-         </div>
-       </div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

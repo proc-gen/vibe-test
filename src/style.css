@@ -23,11 +23,28 @@ body {
   background-color: #2a2a2a;
   color: white;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
   padding: 20px;
   box-sizing: border-box;
-  gap: 10px;
+  gap: 30px;
   border-top: 2px solid #444;
+  overflow-y: auto;
+}
+
+#input-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  flex: 1;
+  max-width: 600px;
+}
+
+#input-group > .field:first-child, 
+#input-group > .field:nth-child(4),
+#input-group > #rules-section {
+  grid-column: span 2;
 }
 
 #instructions {
@@ -37,6 +54,8 @@ body {
   font-size: 14px;
   line-height: 1.4;
   border-left: 4px solid #4caf50;
+  width: 300px;
+  flex-shrink: 0;
 }
 
 #instructions h3 {
@@ -63,14 +82,9 @@ body {
   font-family: 'Courier New', Courier, monospace;
 }
 
-#input-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-  margin: 10px 0;
-}
+/* Removed #input-group grid layout in favor of flex column */
 
-.field {
+.field, #rules-section {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -83,13 +97,25 @@ body {
   letter-spacing: 0.5px;
 }
 
-.field input {
+.field input, .field select {
   background-color: #121212;
   color: #00ff00;
   font-family: 'Courier New', Courier, monospace;
   padding: 8px;
   border: 1px solid #555;
   outline: none;
+}
+
+/* Hide default numeric spin buttons */
+.field input::-webkit-outer-spin-button,
+.field input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.field input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .field input:focus {
@@ -107,5 +133,74 @@ body {
 }
 
 #generate-btn:hover {
+  background-color: #45a049;
+}
+
+.rules-label {
+  font-size: 12px;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.rule-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.rule-key {
+  width: 60px;
+  background-color: #121212;
+  color: #00ff00;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 8px;
+  border: 1px solid #555;
+  outline: none;
+}
+
+.rule-value {
+  flex: 1;
+  background-color: #121212;
+  color: #00ff00;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 8px;
+  border: 1px solid #555;
+  outline: none;
+}
+
+.rule-key:focus, .rule-value:focus {
+  border-color: #4caf50;
+}
+
+.remove-rule-btn {
+  background-color: #c62828;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 4px;
+}
+
+.remove-rule-btn:hover {
+  background-color: #b71c1c;
+}
+
+#add-rule-btn, .numeric-controls button {
+  margin-top: 5px;
+  padding: 6px 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+#add-rule-btn:hover, .numeric-controls button:hover {
   background-color: #45a049;
 }

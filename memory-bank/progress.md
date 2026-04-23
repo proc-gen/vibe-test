@@ -3,7 +3,7 @@
 ## Completed Milestones
 - [x] **Core L-System Logic**: Implemented iterative string rewriting and grammar parsing.
 - [x] **3D Turtle Interpreter**: Developed a quaternion-based movement system with stack support for branching.
-- [x] **Three.js Integration**: Built a renderer using `LineSegments` and `BufferGeometry` for efficiency.
+- [x] **Three.js Integration**: Built a high-performance renderer supporting both simple `LineSegments` and volumetric representations (Voxels, Cylinders, Pills) using `InstancedMesh`.
 - [x] **Real-time UI**: Implemented an input loop that allows instant visualization of grammar changes.
 - [x] **Testing Suite**: Created unit tests for the L-System generator, Turtle path calculations, and Visualizer logic.
 
